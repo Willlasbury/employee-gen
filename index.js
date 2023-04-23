@@ -45,6 +45,7 @@ let init = async () => {
         let employee = await createEmployee(newEmployee)
         team.push(employee)
         console.log("team:", team)
+        await writeFileProm('./prod/index.html', generateHtml(team))
         init()
       } else{
         return
