@@ -42,7 +42,7 @@ let init = async () => {
     let askForEmployee = await askEmployeeBool();
     if (askForEmployee) {
       if (askForEmployee.typeEmployee === "Manager") {
-        let managerProps = Manager.generate();
+        let managerProps = await Manager.generate();
         let newEmployee = new Manager(
           managerProps.name,
           managerProps.employeeID,
@@ -50,6 +50,7 @@ let init = async () => {
           managerProps.officeNum
         );
         team.push(newEmployee)
+        console.log("team:", team)
       }
     }
     console.log("askForEmployee:", askForEmployee);
