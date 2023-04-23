@@ -1,4 +1,7 @@
 const generateHtml = require("./util/generateHtml");
+const Manager = require("./lib/Manager");
+const Engineer = require("./lib/Engineer");
+const Intern = require("./lib/Intern");
 const inq = require("inquirer");
 const fs = require("fs");
 const util = require("util");
@@ -19,7 +22,7 @@ let askEmployeeBool = async () => {
         {
           type: "list",
           name: "typeEmployee",
-          message: "Do you want to add an employee?",
+          message: "Which type of employee are you adding?",
           choices: ["Manager", "Intern", "Engineer"],
         },
       ]);
@@ -29,25 +32,33 @@ let askEmployeeBool = async () => {
   }
 };
 
-
 let logGenEmployee = async (employeeType) => {
   employeeType;
 };
 
 let init = async () => {
-    try{
-        let team = []
-  let askForEmployee = await askEmployeeBool();
-//   if (askForEmployee){
-
-//   }
-    console.log("askForEmployee:", askForEmployee)
-// let generator = await generateHtml(team)
-  // console.log("test")
-//   writeFileProm('./prod', generator)
-    } catch (err){
-        throw err
+  try {
+    let team = [];
+    let askForEmployee = await askEmployeeBool();
+    if (askForEmployee) {
+      if (askForEmployee.typeEmployee === "Manager") {
+        let managerProps = Manager.generate();
+        let newEmployee = new Manager(
+          managerProps.name,
+          managerProps.employeeID,
+          managerProps.email,
+          managerProps.officeNum
+        );
+        team.push(newEmployee)
+      }
     }
+    console.log("askForEmployee:", askForEmployee);
+    // let generator = await generateHtml(team)
+    // console.log("test")
+    //   writeFileProm('./prod', generator)
+  } catch (err) {
+    throw err;
+  }
 };
 
 init();
