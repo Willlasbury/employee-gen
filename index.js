@@ -1,10 +1,11 @@
 const generateHtml = require("./util/generateHtml");
-const Manager = require("./lib/Manager");
-const Engineer = require("./lib/Engineer");
-const Intern = require("./lib/Intern");
+// const Manager = require("./lib/Manager");
+// const Engineer = require("./lib/Engineer");
+// const Intern = require("./lib/Intern");
 const inq = require("inquirer");
 const fs = require("fs");
 const util = require("util");
+let createEmployee = require('./lib/crud/createEmployee')
 
 let writeFileProm = util.promisify(fs.writeFile);
 
@@ -32,32 +33,24 @@ let askEmployeeBool = async () => {
   }
 };
 
-let logGenEmployee = async (employeeType) => {
-  employeeType;
-};
+// let logGenEmployee = async (employeeType) => {
+//   employeeType;
+// };
 
+let team = [];
 let init = async () => {
   try {
-    let team = [];
-    let askForEmployee = await askEmployeeBool();
-    if (askForEmployee) {
-      if (askForEmployee.typeEmployee === "Manager") {
-        let managerProps = await Manager.generate();
-        let newEmployee = new Manager(
-          managerProps.name,
-          managerProps.employeeID,
-          managerProps.email,
-          managerProps.officeNum
-        );
-        team.push(newEmployee)
+    let newEmployee = await askEmployeeBool();
+    if (newEmployee) {
+        let employee = await createEmployee(newEmployee)
+        team.push(employee)
         console.log("team:", team)
+        init()
+      } else{
+        return
       }
     }
-    console.log("askForEmployee:", askForEmployee);
-    // let generator = await generateHtml(team)
-    // console.log("test")
-    //   writeFileProm('./prod', generator)
-  } catch (err) {
+    catch (err) {
     throw err;
   }
 };
