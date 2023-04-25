@@ -9,6 +9,7 @@ let createEmployee = require('./lib/crud/createEmployee')
 
 let writeFileProm = util.promisify(fs.writeFile);
 
+// check if the user wants to create a new employee
 let askEmployeeBool = async () => {
   try {
     let response = await inq.prompt([
@@ -18,6 +19,7 @@ let askEmployeeBool = async () => {
         message: "Do you want to add an employee?",
       },
     ]);
+    // if the user wants to create a new employee ask for employee type
     if (response.addEmployee) {
       return await inq.prompt([
         {
@@ -33,18 +35,21 @@ let askEmployeeBool = async () => {
   }
 };
 
-// let logGenEmployee = async (employeeType) => {
-//   employeeType;
-// };
-
+// global storage for the employee team that resets after the program is closed in the terminal
 let team = [];
+
+// initiate application
 let init = async () => {
   try {
+    // check if the user wants to create a new employee and get employee type
     let newEmployee = await askEmployeeBool();
     if (newEmployee) {
+      //create the new employee 
         let employee = await createEmployee(newEmployee)
+        // add the empoloyee to the 'team'
         team.push(employee)
-        console.log("team:", team)
+
+        // create the html in the prod folder 
         await writeFileProm('./prod/index.html', generateHtml(team))
         init()
       } else{
